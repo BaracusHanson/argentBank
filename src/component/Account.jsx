@@ -1,14 +1,19 @@
 import PropTypes from "prop-types";
 import "../designs/css/main.css";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Account = ({ infos }) => {
   const formatAmount = (amount) => {
     return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
-
+  const userState = useSelector((state) => state.user || {});
+  const { profile } = userState;
   return (
-    <Link to={`/profile/transaction/${infos.id}`} className="accountsLinks">
+    <Link
+      to={`/profile/${profile.id}/transaction/${infos.id}`}
+      className="accountsLinks"
+    >
       <div className="userAccount">
         <section className="userAccount-details">
           <p className="userAccount-title">{infos.type}</p>

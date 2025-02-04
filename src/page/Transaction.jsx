@@ -1,17 +1,23 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { PropTypes } from "prop-types";
 import MyAccount from "../component/MyAccount";
 import { useEffect, useState } from "react";
 import Articles from "../component/Articles";
+import { useSelector } from "react-redux";
 
 const Transaction = ({ accountType }) => {
-  //   console.log(accountType);
+    console.log(accountType);
   const { id } = useParams();
   const [infos, setInfos] = useState({});
+  const userToken = useSelector((state) => state.auth.token);
+  const navigate = useNavigate();
   useEffect(() => {
     const account = accountType.find((el) => el.id === parseInt(id));
     setInfos(account);
-  }, [id]);
+    if (!userToken) {
+      navigate("/"); // 🔹 Redirige automatiquement si l'utilisateur n'est pas connecté
+    }
+  }, [id, userToken, navigate,accountType]);
 
   if (!infos || Object.keys(infos).length === 0) {
     return <div>Chargement...</div>;

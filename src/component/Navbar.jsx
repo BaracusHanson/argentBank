@@ -19,7 +19,7 @@ const Navbar = () => {
 
   // Vérifier si `user` existe avant de destructurer `profile`
   const userState = useSelector((state) => state.user || {});
-  const { profile, status, error } = userState;
+  const { profile } = userState;
 
   useEffect(() => {
     if (userToken) {
@@ -40,11 +40,16 @@ const Navbar = () => {
       <div>
         {userToken ? (
           <div className="userContainerLogOut">
-            <div className="userLogout">
+            <Link
+              to={profile ? `/profile/${profile.id}` : "/"}
+              className="userLogout"
+            >
               <FaUser />
-            </div>
+            </Link>
             {profile ? (
-              <h1 className="userNameConnected">{profile.firstName}</h1>
+              <h1 className="userNameConnected">
+                {profile.firstName} {profile.lastName}
+              </h1>
             ) : (
               <p>Chargement...</p>
             )}

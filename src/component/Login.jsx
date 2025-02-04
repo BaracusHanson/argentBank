@@ -8,7 +8,6 @@ import {
 } from "../utils/slices/authSlice"; // Actions Redux
 import { useNavigate } from "react-router-dom";
 
-
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -17,7 +16,8 @@ const Login = () => {
 
   // Sélectionner l'état du store Redux (chargement et erreur)
   const { loading, error } = useSelector((state) => state.auth);
-
+  const userState = useSelector((state) => state.user || {});
+  const { profile } = userState;
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -38,23 +38,22 @@ const Login = () => {
           password: password,
         }
       );
-      // console.log(response.data.body);
-    //   const token = response.data.body.token;
 
-      // En cas de succès, stocker le token et l'utilisateur dans Redux
       dispatch(
         loginSuccess({
           token: response.data.body.token,
-          user: response.data.user, // Ajoute les informations de l'utilisateur si nécessaire
+          user: response.data.user, 
         })
       );
-      
+
       // Réinitialiser les champs
       setUsername("");
       setPassword("");
 
       // Rediriger vers la page de profil
-      navigate("/profile");
+      if (response) {
+        navigate(`/profile/${profile.id}`);
+      }
     } catch (err) {
       // En cas d'erreur, afficher l'erreur dans Redux
       if (err.response) {

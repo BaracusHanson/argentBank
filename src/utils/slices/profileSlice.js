@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// Thunk pour récupérer le profil utilisateur en fonction du token
+
 export const fetchUserProfile = createAsyncThunk(
   "user/fetchUserProfile",
   async (_, { getState, rejectWithValue }) => {
@@ -22,6 +22,27 @@ export const fetchUserProfile = createAsyncThunk(
       return response.data.body; // Récupération du profil
     } catch (error) {
       return rejectWithValue(error.response?.data || "Erreur serveur");
+    }
+  }
+);
+
+export const updateUserProfile = createAsyncThunk(
+  "user/updateProfile",
+  async ({ firstName, lastName }, { getState, rejectWithValue }) => {
+    try {
+      const token = getState().auth.token;
+      const response = await axios.put(
+        "http://localhost:3001/api/v1/user/profile",
+        { firstName, lastName },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data.body; // Retourne le profil mis à jour
+    } catch (error) {
+      return rejectWithValue(error.response.data);
     }
   }
 );
@@ -51,6 +72,12 @@ const profileSlice = createSlice({
       })
       .addCase(fetchUserProfile.rejected, (state, action) => {
         state.status = "failed";
+        state.error = action.payload;
+      })
+      .addCase(updateUserProfile.fulfilled, (state, action) => {
+        state.profile = action.payload;
+      })
+      .addCase(updateUserProfile.rejected, (state, action) => {
         state.error = action.payload;
       });
   },

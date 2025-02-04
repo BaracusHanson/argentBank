@@ -8,9 +8,9 @@ import Profil from "./page/Profil.jsx";
 import Transaction from "./page/Transaction.jsx";
 import store from "./utils/store.js";
 import { Provider } from "react-redux";
+import NotFound from "./page/NotFound.jsx";
 
 function App() {
-  // console.log(store);
   const accountType = [
     {
       id: 1,
@@ -38,13 +38,14 @@ function App() {
           <Navbar />
           <Routes>
             <Route path="/" element={<Accueil />} />
+            <Route path="*" element={<NotFound />} />
             <Route path="/login" element={<SignIn />} />
             <Route
-              path="/profile"
+              path="/profile/:id"
               element={<Profil accountType={accountType} />}
             />
             <Route
-              path="/profile/transaction/:id"
+              path="/profile/:id/transaction/:id"
               element={<Transaction accountType={accountType} />}
             />
           </Routes>

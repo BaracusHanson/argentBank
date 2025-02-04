@@ -9,7 +9,7 @@ const Articles = () => {
           className="transactionIcon"
           style={{
             transform: !open ? "rotate(0deg)" : "rotate(180deg)",
-            transition: " .3S ease-in-out",
+            transition: " .3s ease-in-out",
           }}
           onClick={() => setOpen(!open)}
         >
@@ -23,8 +23,9 @@ const Articles = () => {
         </div>
       </header>
       <div
-        className={!open? "transactionInputs closed":"transactionInputs open"}
-
+        className={
+          open ? "transactionInputs open" : "transactionInputs closed"
+        }
       >
         <p>
           Transaction Type:

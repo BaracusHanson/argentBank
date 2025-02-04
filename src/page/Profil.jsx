@@ -3,16 +3,19 @@ import Account from "../component/Account";
 import UpdataUserName from "../component/UpdataUserName";
 import "../designs/css/main.css";
 import { PropTypes } from "prop-types";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const Profil = ({ accountType }) => {
   // Récupère le token de l'état global
   const userToken = useSelector((state) => state.auth.token);
+  const navigate = useNavigate();
 
-  // Si le token est absent, redirige vers la page de connexion
-  if (!userToken) {
-    return <Navigate to="/" replace />;
-  }
+  useEffect(() => {
+    if (!userToken) {
+      navigate("/"); // 🔹 Redirige automatiquement si l'utilisateur n'est pas connecté
+    }
+  }, [userToken, navigate]);
 
   return (
     <section className="page userPage">
